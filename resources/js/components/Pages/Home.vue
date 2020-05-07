@@ -56,7 +56,7 @@ import EventBus from '../../EventBus';
     data:function(){
          return{
              loading:true,
-             Barcode:true
+             Barcode:false
          }
     },
     inject: ['theme'],

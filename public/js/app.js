@@ -2139,7 +2139,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       loading: true,
-      Barcode: true
+      Barcode: false
     };
   },
   inject: ['theme']
