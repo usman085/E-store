@@ -5,13 +5,20 @@
  */
 
 require('./bootstrap');
-
-
 import Vue from 'vue'
 import vuetify from './plugins/vuetify' // path to vuetify export
+import VueRouter from 'vue-router';
+import routes from './router';
+Vue.component('App', require('./components/AppComponent').default); //Root Component
 
+Vue.use(VueRouter);
 
+const router = new VueRouter({
+    routes
+});
 const app = new Vue({
-    el: '#app',
+    el: '#root-app',
     vuetify,
+    router
+
 });

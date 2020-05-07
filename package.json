@@ -24,6 +24,8 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "vue-quaggajs": "^1.0.10",
+        "vue-router": "^3.1.6",
         "vuetify": "^2.2.27"
     }
 }

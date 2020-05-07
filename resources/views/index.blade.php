@@ -19,8 +19,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-   <div id="app">
-   <v-app>
+   <div id="root-app">
+      <v-app>
+         <!-- Components Renders Here -->
+           <App/>
          <!-- Components Renders Here -->
     </v-app>
     </div>
