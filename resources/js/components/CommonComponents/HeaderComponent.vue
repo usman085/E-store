@@ -9,7 +9,7 @@
         <v-icon v-if="iconName">mdi-magnify</v-icon>
         <v-icon v-else icon>mdi-close</v-icon>
       </v-btn>
-     <v-btn icon @click="barcodeToggle()">
+     <v-btn icon style="display:none" @click="barcodeToggle()">
         <v-icon icon> mdi-barcode</v-icon>
       </v-btn>
       
@@ -21,11 +21,17 @@
         </template>
 
         <v-list>
+          <!-- <v-list-item>
+            <v-list-item-title><router-link to="/Dashborad" class="links">Go To shop</router-link></v-list-item-title>
+          </v-list-item> -->
           <v-list-item>
-            <v-list-item-title><router-link to="/Dashborad">Go To shop</router-link></v-list-item-title>
+            <v-list-item-title><router-link to="/dash-borad" class="links">Home</router-link></v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title><router-link to="/">Home</router-link></v-list-item-title>
+            <v-list-item-title><router-link to="/addProduct" class="links">Add Products</router-link></v-list-item-title>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-title><router-link to="/MangeProduct" class="links">Mange Products</router-link></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -132,6 +138,12 @@ export default {
 <style scoped>
 .nav-bar-wrapper{
     position: relative;
+}
+.links{
+  display: block;
+  text-decoration: none;
+  color: black;
+  width: 100%;
 }
 
 </style>

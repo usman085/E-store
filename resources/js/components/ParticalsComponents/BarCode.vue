@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-quagga :onDetected="logIt" :readerSize="readerSize" :readerTypes="['ean_reader']"></v-quagga>
+    <h1>Usakjh</h1>
+    <!-- <v-quagga :onDetected="logIt" :readerSize="readerSize" :readerTypes="['ean_reader']"></v-quagga> -->
   </div>
 </template>
 
