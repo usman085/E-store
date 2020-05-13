@@ -1,107 +1,46 @@
 <template>
-<div class="form-wrapper">
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
-      required
-    ></v-text-field>
+<v-card>
+    <v-tabs centered="" v-model="tab" background-color="primary" dark>
+      <v-tab v-for="item in items" :key="item.tab">
+        {{ item.tab }}
+      </v-tab>
+    </v-tabs>
 
-    <v-text-field
-      v-model="email"
-      :rules="emailRules"
-      label="E-mail"
-      required
-    ></v-text-field>
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <v-card flat>
+         
+           <addCartoonForm></addCartoonForm>
 
-    <v-select
-      v-model="select"
-      :items="items"
-      :rules="[v => !!v || 'Item is required']"
-      label="Item"
-      required
-    ></v-select>
+        </v-card>
 
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[v => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
-      required
-    ></v-checkbox>
+      </v-tab-item>
 
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      @click="validate"
-    >
-      Validate
-    </v-btn>
+       <v-tab-item>
+        <v-card flat>
+         
+           <addBagForm></addBagForm>
 
-    <v-btn
-      color="error"
-      class="mr-4"
-      @click="reset"
-    >
-      Reset Form
-    </v-btn>
-
-    <v-btn
-      color="warning"
-      @click="resetValidation"
-    >
-      Reset Validation
-    </v-btn>
-  </v-form>
-  </div>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-card>
 </template>
+
 <script>
-
+import addCartoonForm from './addCartoonForm';
+import addBagForm from './addBagForm';
   export default {
-      name:'formComponent',
-    data: () => ({
-      valid: true,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-      ],
-      email: '',
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-      ],
-      select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4',
-      ],
-      checkbox: false,
-    }),
-
-    methods: {
-      validate () {
-        this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      resetValidation () {
-        this.$refs.form.resetValidation()
-      },
+    name:'formComponent',
+    components:{addCartoonForm,addBagForm},
+    data () {
+      return {
+        tab: null,
+        items: [
+          { tab: 'Add Cartoon' },{tab:'Add Bag'}
+          
+        ],
+      }
     },
   }
 </script>
-<style scoped>
-.v-form{
-    padding:0 20px;
-}
-</style>
