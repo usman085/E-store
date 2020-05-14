@@ -5,7 +5,7 @@
       
       <v-spacer></v-spacer>
     
-      <v-btn icon  @click="searchToggle()">
+      <v-btn icon v-if="$route.path == '/dash-borad'"  @click="searchToggle()">
         <v-icon v-if="iconName">mdi-magnify</v-icon>
         <v-icon v-else icon>mdi-close</v-icon>
       </v-btn>
@@ -31,28 +31,14 @@
             <v-list-item-title><router-link to="/addProduct" class="links">Add Products</router-link></v-list-item-title>
           </v-list-item>
           <v-list-item>
-            <v-list-item-title><router-link to="/MangeProduct" class="links">Mange Products</router-link></v-list-item-title>
+            <v-list-item-title><router-link to="/productMange" class="links">Mange Products</router-link></v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>
     <div id="search-bar">
          <v-app-bar color="deep-purple accent-4" dense dark flat>
-        <v-autocomplete 
-        v-model="model"
-        :items="items"
-        :loading="isLoading"
-        :search-input.sync="search"
-        color="white"
-        hide-no-data
-        hide-selected
-        item-text="Description"
-        item-value="API"
-       
-        placeholder="Product Name e.g (Liptan)"
-        prepend-icon="mdi-magnify"
-        return-object
-      ></v-autocomplete>
+      <v-text-field placeholder="Enter Product Name" v-model="searchfield" @keydown="searchData()"></v-text-field>
        </v-app-bar>
       </div>
        
@@ -64,16 +50,13 @@ import EventBus from '../../EventBus';
 export default {
   name: "HeaderComponent",
      mounted(){
+       
          $('#search-bar').hide();
      },
     data:function(){
         return{
-      descriptionLimit: 60,
-      entries: [],
-      isLoading: false,
-      model: null,
-      search: null,
-      iconName:true
+          searchfield:'',
+            iconName:true
         }
     },
      methods:{
@@ -81,56 +64,12 @@ export default {
               $('#search-bar').toggle();
               this.iconName = !this.iconName;
          },
-         barcodeToggle:function(){ 
-            EventBus.$emit('barcode');
+         searchData:function(){
+               if(this.searchfield.length > 1 ){
+                 EventBus.$emit('searchTrigger',this.searchfield);
+               }
          }
      },
-    computed: {
-      fields () {
-        if (!this.model) return []
-
-        return Object.keys(this.model).map(key => {
-          return {
-            key,
-            value: this.model[key] || 'n/a',
-          }
-        })
-      },
-      items () {
-        return this.entries.map(entry => {
-          const Description = entry.Description.length > this.descriptionLimit
-            ? entry.Description.slice(0, this.descriptionLimit) + '...'
-            : entry.Description
-
-          return Object.assign({}, entry, { Description })
-        })
-      },
-    },
-
-    watch: {
-      search (val) {
-        // Items have already been loaded
-        if (this.items.length > 0) return
-
-        // Items have already been requested
-        if (this.isLoading) return
-
-        this.isLoading = true
-
-        // Lazily load input items
-        fetch('https://api.publicapis.org/entries')
-          .then(res => res.json())
-          .then(res => {
-            const { count, entries } = res
-            this.count = count
-            this.entries = entries
-          })
-          .catch(err => {
-            console.log(err)
-          })
-          .finally(() => (this.isLoading = false))
-      },
-    },
   
 };
 </script>

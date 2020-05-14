@@ -97,6 +97,6 @@
 </script>
 <style scoped>
 .v-form{
-    padding:0 20px;
+    padding: 20px;
 }
 </style>

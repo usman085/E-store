@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/random-product','HomeController@RandamData');
+
+Route::get('/search-product/{searchQuery}','HomeController@SearchQuery');
+
+Route::post('/add-Carton-Product','AddProductController@addCartonProduct');

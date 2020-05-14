@@ -10,7 +10,7 @@
       <v-tab-item>
         <v-card flat>
          
-           <addCartoonForm></addCartoonForm>
+           <addCartonForm></addCartonForm>
 
         </v-card>
 
@@ -28,16 +28,16 @@
 </template>
 
 <script>
-import addCartoonForm from './addCartoonForm';
+import addCartonForm from './addCartonForm';
 import addBagForm from './addBagForm';
   export default {
     name:'formComponent',
-    components:{addCartoonForm,addBagForm},
+    components:{addCartonForm,addBagForm},
     data () {
       return {
         tab: null,
         items: [
-          { tab: 'Add Cartoon' },{tab:'Add Bag'}
+          { tab: 'Add Carton' },{tab:'Add Bag'}
           
         ],
       }

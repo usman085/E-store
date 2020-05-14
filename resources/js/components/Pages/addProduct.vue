@@ -23,6 +23,7 @@ export default {
     margin: 14px 0;
 }
 .form-product-wrapper{
-    padding: 0 15px;
+    padding: 15px;
+    margin-bottom:20px;
 }
 </style>
