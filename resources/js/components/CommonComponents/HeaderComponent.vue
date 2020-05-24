@@ -9,8 +9,8 @@
         <v-icon v-if="iconName">mdi-magnify</v-icon>
         <v-icon v-else icon>mdi-close</v-icon>
       </v-btn>
-     <v-btn icon style="display:none" @click="barcodeToggle()">
-        <v-icon icon> mdi-barcode</v-icon>
+     <v-btn icon  @click="refreshData()" v-if="$route.path == '/dash-borad'">
+        <v-icon icon> mdi-sync</v-icon>
       </v-btn>
       
       <v-menu left bottom>
@@ -38,7 +38,7 @@
     </v-app-bar>
     <div id="search-bar">
          <v-app-bar color="deep-purple accent-4" dense dark flat>
-      <v-text-field placeholder="Enter Product Name" v-model="searchfield" @keydown="searchData()"></v-text-field>
+         <v-text-field placeholder="Enter Product Name" v-model="searchfield" @keydown="searchData()"></v-text-field>
        </v-app-bar>
       </div>
        
@@ -50,7 +50,6 @@ import EventBus from '../../EventBus';
 export default {
   name: "HeaderComponent",
      mounted(){
-       
          $('#search-bar').hide();
      },
     data:function(){
@@ -60,6 +59,9 @@ export default {
         }
     },
      methods:{
+         refreshData:function(){
+           EventBus.$emit('searchRefresh',this.searchfield);
+         },
          searchToggle:function(){
               $('#search-bar').toggle();
               this.iconName = !this.iconName;
@@ -75,6 +77,13 @@ export default {
 </script>
 
 <style scoped>
+.log-out-btn,.log-out-btn:focus{
+ text-align: left;
+ border:none;
+ display: none;
+ outline: none;
+}
+
 .nav-bar-wrapper{
     position: relative;
 }

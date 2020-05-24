@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //this->middleware('auth');
+       // $this->middleware('auth');
     }
 
     /**
@@ -38,15 +38,15 @@ class HomeController extends Controller
     }
     public function SearchQuery(Request $request){
 
-      $ProductBag=ProductBag::where('pro_name', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
-      $ProductCarton=ProductCarton::where('pro_name', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
-      $ProductBagBrand=ProductBag::where('pro_brand', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
-      $ProductCartonBrand=ProductCarton::where('pro_brand', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
-      
+      $ProductBag=ProductBag::where('pro_name', 'LIKE', '%'.$request->searchQuery.'%')
+      ->orWhere('pro_brand', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
+      $ProductCarton=ProductCarton::where('pro_name', 'LIKE', '%'.$request->searchQuery.'%')
+      ->orWhere('pro_brand', 'LIKE', '%'.$request->searchQuery.'%')->get()->toArray();
+            
       $mergedDataProName = array_merge($ProductBag, $ProductCarton);
-      $mergedDataBrand = array_merge($ProductBagBrand, $ProductCartonBrand);
-      $mergedData=array_merge($mergedDataProName, $mergedDataBrand);
-      shuffle($mergedData);
-      return response()->json($mergedData);
+     
+      shuffle($mergedDataProName);
+
+      return response()->json($mergedDataProName);
     }
 }

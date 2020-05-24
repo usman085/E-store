@@ -4,19 +4,20 @@
   <v-form ref="form" v-model="valid" lazy-validation>
 
     <v-text-field v-model="proName"  :rules="nameRules" label="Product Name" required></v-text-field>
-     <v-text-field v-model="cartonTotalPiece"   label="Total Piece In carton"   ></v-text-field>
+     <v-text-field v-model="proBrand"  :rules="nameRules" label="Company Name" required></v-text-field>
+     <v-text-field v-model="cartonTotalPiece" type="number"  label="Total Piece In carton \ Dozen"   ></v-text-field>
     
-    <v-text-field v-model="salePricePerPiece" @blur="priceCalRetailSale()" label="Sale Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="salePricecarton" @blur="priceCalRetailSale()"  label="Sale Price Carton"   ></v-text-field>
+    <v-text-field v-model="salePricePerPiece" type="number"  @blur="priceCalRetailSale()" label="Sale Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="salePricecarton" type="number"  @blur="priceCalRetailSale()"  label="Sale Price Carton"   ></v-text-field>
 
-     <v-text-field v-model="wholeSalePricePerPiece" @blur="priceCalWholeSale()" label="Whole Sale Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="wholeSalePricecarton"  label="Whole Sale Price Carton" @blur="priceCalWholeSale()"   ></v-text-field>
+     <v-text-field v-model="wholeSalePricePerPiece" type="number"  @blur="priceCalWholeSale()" label="Whole Sale Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="wholeSalePricecarton" type="number"  label="Whole Sale Price Carton" @blur="priceCalWholeSale()"   ></v-text-field>
  
-  <v-text-field v-model="buyPricePerPiece" @blur="priceCalBuy()"  label="Purched Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="buyPricecarton"  @blur="priceCalBuy()" label="Purched Price Carton"  required ></v-text-field>
+  <v-text-field v-model="buyPricePerPiece" type="number"  @blur="priceCalBuy()"  label="Purched Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="buyPricecarton" type="number"   @blur="priceCalBuy()" label="Purched Price Carton"  required ></v-text-field>
 
  <v-btn color="warning" @click="submitData()"> Submit Product</v-btn>
-<v-btn  color="error" class="mr-4" @click="reset">Reset Form</v-btn>
+<v-btn  color="error" class="mr-4" @click="resetForm">Reset Form</v-btn>
   </v-form>
   </div>
 </template>
@@ -34,30 +35,34 @@
       cartonTotalPiece:'',
       salePricecarton:'',
       salePricePerPiece:'',
-      proBrandName:'',
+      proBrand:'',
       nameRules: [v => !!v || 'Field is required',]
     }),
 
     methods: {
+      resetForm :function() {
+        this.$refs.form.reset()
+      },
         submitData:function(){
               var body = {
                 proName:this.proName,
                 buyPricePerPiece:this.buyPricePerPiece,
                 buyPricecarton:this.buyPricecarton,
-                 wholeSalePricecarton:this.wholeSalePricecarton,
-                 wholeSalePricePerPiece:this.wholeSalePricePerPiece,
-                 cartonTotalPiece:this.cartonTotalPiece,
+                wholeSalePricecarton:this.wholeSalePricecarton,
+                wholeSalePricePerPiece:this.wholeSalePricePerPiece,
+                cartonTotalPiece:this.cartonTotalPiece,
                 salePricecarton:this.salePricecarton,
-                 salePricePerPiece:this.salePricePerPiece,
-                 proBrandName:this.proBrandName
+                salePricePerPiece:this.salePricePerPiece,
+                proBrandName:this.proBrand,
+               
                 }
-                 axios({
+                axios({
                     method: 'post',
                     url: '/api/add-Carton-Product',
                      data: body
                   })
-                 .then(function (response) {
-                   console.log(response);
+                 .then(response=>{
+                   this.resetForm();
                     })
                      .catch(function (error) {
                         console.log(error);
@@ -94,9 +99,7 @@
             }
 
         },
-      reset () {
-        this.$refs.form.reset()
-      },
+       
     },
   }
 </script>

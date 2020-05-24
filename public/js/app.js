@@ -1997,6 +1997,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    refreshData: function refreshData() {
+      _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('searchRefresh', this.searchfield);
+    },
     searchToggle: function searchToggle() {
       $('#search-bar').toggle();
       this.iconName = !this.iconName;
@@ -2103,6 +2106,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Home",
@@ -2115,6 +2121,25 @@ __webpack_require__.r(__webpack_exports__);
       console.log(data);
     })["catch"](function () {
       return console.log('Error In serve');
+    });
+    _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('searchRefresh', function (searchRefresh) {
+      if (searchRefresh != ' ' && searchRefresh.length > 2) {
+        axios.get('http://localhost:8000/api/search-product/' + searchRefresh).then(function (data) {
+          _this.items = data.data;
+          _this.loading = false;
+          console.log(data);
+        })["catch"](function () {
+          return console.log('Error In serve');
+        });
+      } else {
+        axios.get('http://localhost:8000/api/random-product').then(function (data) {
+          _this.items = data.data;
+          _this.loading = false;
+          console.log(data);
+        })["catch"](function () {
+          return console.log('Error In serve');
+        });
+      }
     });
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('searchTrigger', function (searchQuery) {
       _this.loading = true;
@@ -2208,43 +2233,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'productMange',
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('http://localhost:8000/api/all-carton').then(function (res) {
+      console.log(res);
+      _this.cartonProducts = res.data;
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  },
   data: function data() {
     return {
-      search: "",
-      headers: [{
+      CartonSearch: "",
+      bagSearch: '',
+      cartonHeaders: [{
         text: "Product Name",
         align: "start",
         sortable: false,
-        value: "name"
+        value: "pro_name"
+      }, {
+        text: "Company Name",
+        value: "pro_brand"
       }, {
         text: "Purchase Price Per Piece",
-        value: "protein"
+        value: "pro_purchase_price_per_piece"
       }, {
         text: "Purchase Price Per Carton",
-        value: "iron"
+        value: "pro_purchase_price_carton"
       }, {
         text: "Sale Price Per Piece",
-        value: "calories"
+        value: "pro_retail_price_per_piece"
       }, {
         text: "Sala Price Per Carton",
-        value: "fat"
+        value: "pro_retail_price_carton"
+      }, {
+        text: "Whole Sale Price Per Piece",
+        value: "pro_whole_sale_price_per_piece"
       }, {
         text: "Whole Sale Price Per Carton",
-        value: "carbs"
+        value: "pro_whole_sale_price_carton"
       }, {
         text: "Total Per Carton",
-        value: "carbs"
+        value: "pro_total_piece_in_carton"
+      }, {
+        text: "Action",
+        value: "pro_total_piece_in_carton"
       }],
-      products: [{
-        name: "KitKat",
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: "6%"
-      }],
+      cartonProducts: [],
       header: [{
         text: "Product Name",
         align: "start",
@@ -2379,16 +2439,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'addBagForm',
   data: function data() {
@@ -2402,14 +2452,39 @@ __webpack_require__.r(__webpack_exports__);
       salePriceBag: '',
       salePricePerKg: '',
       proName: '',
+      proBrand: '',
       nameRules: [function (v) {
         return !!v || 'Field is required';
-      }],
-      select: null,
-      items: ['Carton', 'Thala']
+      }]
     };
   },
   methods: {
+    submitData: function submitData() {
+      var _this = this;
+
+      var body = {
+        proName: this.proName,
+        buyPricePerKg: this.buyPricePerKg,
+        buyPriceBag: this.buyPriceBag,
+        wholeSalePriceBag: this.wholeSalePriceBag,
+        wholeSalePricePerKg: this.wholeSalePricePerKg,
+        totalWeight: this.totalWeight,
+        salePriceBag: this.salePriceBag,
+        salePricePerKg: this.salePricePerKg,
+        proBrandName: this.proBrand
+      };
+      axios({
+        method: 'post',
+        url: '/api/add-Bag-Product',
+        data: body
+      }).then(function (response) {
+        console.log(response);
+
+        _this.resetForm();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     priceCalRetail: function priceCalRetail() {
       if (this.totalWeight != '') {
         if (this.salePricePerKg != '' && this.salePriceBag == '') {
@@ -2443,7 +2518,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    reset: function reset() {
+    resetForm: function resetForm() {
       this.$refs.form.reset();
     }
   }
@@ -2482,6 +2557,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'addcartonForm',
   data: function data() {
@@ -2495,14 +2571,19 @@ __webpack_require__.r(__webpack_exports__);
       cartonTotalPiece: '',
       salePricecarton: '',
       salePricePerPiece: '',
-      proBrandName: '',
+      proBrand: '',
       nameRules: [function (v) {
         return !!v || 'Field is required';
       }]
     };
   },
   methods: {
+    resetForm: function resetForm() {
+      this.$refs.form.reset();
+    },
     submitData: function submitData() {
+      var _this = this;
+
       var body = {
         proName: this.proName,
         buyPricePerPiece: this.buyPricePerPiece,
@@ -2512,14 +2593,14 @@ __webpack_require__.r(__webpack_exports__);
         cartonTotalPiece: this.cartonTotalPiece,
         salePricecarton: this.salePricecarton,
         salePricePerPiece: this.salePricePerPiece,
-        proBrandName: this.proBrandName
+        proBrandName: this.proBrand
       };
       axios({
         method: 'post',
         url: '/api/add-Carton-Product',
         data: body
       }).then(function (response) {
-        console.log(response);
+        _this.resetForm();
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2556,9 +2637,6 @@ __webpack_require__.r(__webpack_exports__);
           this.salePricePerPiece = this.salePricecarton / this.cartonTotalPiece;
         }
       }
-    },
-    reset: function reset() {
-      this.$refs.form.reset();
     }
   }
 });
@@ -7127,7 +7205,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.nav-bar-wrapper[data-v-6bf0858d]{\r\n    position: relative;\n}\n.links[data-v-6bf0858d]{\r\n  display: block;\r\n  text-decoration: none;\r\n  color: black;\r\n  width: 100%;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n.log-out-btn[data-v-6bf0858d],.log-out-btn[data-v-6bf0858d]:focus{\r\n text-align: left;\r\n border:none;\r\n display: none;\r\n outline: none;\n}\n.nav-bar-wrapper[data-v-6bf0858d]{\r\n    position: relative;\n}\n.links[data-v-6bf0858d]{\r\n  display: block;\r\n  text-decoration: none;\r\n  color: black;\r\n  width: 100%;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -7146,7 +7224,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.items-list[data-v-6f716c15] {\r\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\n}\n.rate-right[data-v-6f716c15] {\r\n  text-align: right;\n}\n.rate-left[data-v-6f716c15] {\r\n  text-align: left;\n}\n.rate[data-v-6f716c15] {\r\n  font-weight: bold;\n}\n.block[data-v-6f716c15] {\r\n  padding: 5px;\n}\nh4[data-v-6f716c15] {\r\n  padding-bottom: 8px;\r\n  font-size: 0.9rem;\r\n  text-align: center;\r\n  text-decoration: underline;\r\n  color: #1e1e1e;\n}\r\n", ""]);
+exports.push([module.i, "\n.rate-right[data-v-6f716c15] {\r\n  text-align: right;\n}\n.rate-left[data-v-6f716c15] {\r\n  text-align: left;\n}\n.v-expansion-panel-header[data-v-6f716c15]{\r\n  font-weight: bold;\n}\nh4[data-v-6f716c15] {\r\n  padding-bottom: 8px;\r\n  font-size: 0.9rem;\r\n  text-align: center;\r\n  text-decoration: underline;\r\n  color: #1e1e1e;\n}\np[data-v-6f716c15]{\r\n  font-size: 14px;\n}\nh3[data-v-6f716c15]{\r\n  width: 100%;\r\n  background: white;\r\n  margin-top: 10px;\r\n  padding: 5px;\r\n  border-bottom: 1px dotted #ccc7c7;\n}\n.items-list[data-v-6f716c15]{\r\n  padding: 0;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -39144,20 +39222,21 @@ var render = function() {
               )
             : _vm._e(),
           _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              staticStyle: { display: "none" },
-              attrs: { icon: "" },
-              on: {
-                click: function($event) {
-                  return _vm.barcodeToggle()
-                }
-              }
-            },
-            [_c("v-icon", { attrs: { icon: "" } }, [_vm._v(" mdi-barcode")])],
-            1
-          ),
+          _vm.$route.path == "/dash-borad"
+            ? _c(
+                "v-btn",
+                {
+                  attrs: { icon: "" },
+                  on: {
+                    click: function($event) {
+                      return _vm.refreshData()
+                    }
+                  }
+                },
+                [_c("v-icon", { attrs: { icon: "" } }, [_vm._v(" mdi-sync")])],
+                1
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c(
             "v-menu",
@@ -39406,242 +39485,231 @@ var render = function() {
                   },
                   [
                     _c(
-                      "v-list-item-content",
+                      "v-expansion-panels",
                       [
-                        _c("v-list-item-title", [
-                          _c("h3", [_vm._v(_vm._s(item.pro_name))])
+                        _c("h3", [
+                          _vm._v(_vm._s(_vm._f("capitalize")(item.pro_name)))
                         ]),
                         _vm._v(" "),
-                        _c("v-divider"),
+                        _c(
+                          "v-expansion-panel",
+                          [
+                            _c("v-expansion-panel-header", [
+                              _vm._v("Sale Price")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-expansion-panel-content", [
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-left" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate: Rs " +
+                                            _vm._s(
+                                              item.pro_retail_price_per_piece
+                                            )
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-left" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate: Rs " +
+                                            _vm._s(item.pro_retail_price_per_kg)
+                                        )
+                                      ]
+                                    )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Carton Rate (" +
+                                            _vm._s(
+                                              item.pro_total_piece_in_carton
+                                            ) +
+                                            "p): Rs " +
+                                            _vm._s(item.pro_retail_price_carton)
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Bag Rate (" +
+                                            _vm._s(
+                                              item.pro_total_weight_in_bag
+                                            ) +
+                                            "KG): Rs " +
+                                            _vm._s(item.pro_retail_price_bag)
+                                        )
+                                      ]
+                                    )
+                              ])
+                            ])
+                          ],
+                          1
+                        ),
                         _vm._v(" "),
-                        _c("v-list-item-subtitle", [
-                          _c("div", { staticClass: "pro-detail" }, [
-                            _c(
-                              "div",
-                              { staticClass: "block" },
-                              [
-                                _c("h4", [_c("i", [_vm._v("Sales Price")])]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-left" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate: Rs " +
-                                              _vm._s(
-                                                item.pro_retail_price_per_price
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-left" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate: Rs " +
-                                              _vm._s(
-                                                item.pro_retail_price_per_kg
-                                              )
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Carton Rate (" +
-                                              _vm._s(
-                                                item.pro_total_piece_in_carton
-                                              ) +
-                                              "p): Rs " +
-                                              _vm._s(
-                                                item.pro_retail_price_carton
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Bag Rate (" +
-                                              _vm._s(
-                                                item.pro_total_weight_in_bag
-                                              ) +
-                                              "KG): Rs " +
-                                              _vm._s(item.pro_retail_price_bag)
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-divider")
-                              ],
-                              1
-                            ),
+                        _c(
+                          "v-expansion-panel",
+                          [
+                            _c("v-expansion-panel-header", [
+                              _vm._v("Whole Sale Price")
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "block" },
-                              [
-                                _c("h4", [
-                                  _c("i", [_vm._v("Whole Sale Price")])
-                                ]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-left" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate: Rs " +
-                                              _vm._s(
-                                                item.pro_whole_sale_price_per_piece
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-left" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate: Rs " +
-                                              _vm._s(
-                                                item.pro_whole_sale_price_per_kg
-                                              )
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Carton Rate (" +
-                                              _vm._s(
-                                                item.pro_total_piece_in_carton
-                                              ) +
-                                              "p): Rs " +
-                                              _vm._s(
-                                                item.pro_whole_sale_price_carton
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Bag Rate (" +
-                                              _vm._s(
-                                                item.pro_total_weight_in_bag
-                                              ) +
-                                              "KG): Rs " +
-                                              _vm._s(
-                                                item.pro_whole_sale_price_bag
-                                              )
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-divider")
-                              ],
-                              1
-                            ),
+                            _c("v-expansion-panel-content", [
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-left" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate: Rs " +
+                                            _vm._s(
+                                              item.pro_whole_sale_price_per_piece
+                                            )
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-left" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate: Rs " +
+                                            _vm._s(
+                                              item.pro_whole_sale_price_per_kg
+                                            )
+                                        )
+                                      ]
+                                    )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Carton Rate (" +
+                                            _vm._s(
+                                              item.pro_total_piece_in_carton
+                                            ) +
+                                            "p): Rs " +
+                                            _vm._s(
+                                              item.pro_whole_sale_price_carton
+                                            )
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Bag Rate (" +
+                                            _vm._s(
+                                              item.pro_total_weight_in_bag
+                                            ) +
+                                            "KG): Rs " +
+                                            _vm._s(
+                                              item.pro_whole_sale_price_bag
+                                            )
+                                        )
+                                      ]
+                                    )
+                              ])
+                            ])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-expansion-panel",
+                          [
+                            _c("v-expansion-panel-header", [
+                              _vm._v("Purchase Price")
+                            ]),
                             _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "block" },
-                              [
-                                _c("h4", [_c("i", [_vm._v("Purched Price")])]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate : Rs " +
-                                              _vm._s(
-                                                item.pro_purchase_price_per_piece
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Sale Rate : Rs " +
-                                              _vm._s(
-                                                item.pro_purchase_price_per_kg
-                                              )
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("p", [
-                                  item.pro_type
-                                    ? _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Carton Rate (" +
-                                              _vm._s(
-                                                item.pro_total_piece_in_carton
-                                              ) +
-                                              "p): Rs " +
-                                              _vm._s(
-                                                item.pro_purchase_price_carton
-                                              )
-                                          )
-                                        ]
-                                      )
-                                    : _c(
-                                        "span",
-                                        { staticClass: "rate rate-right" },
-                                        [
-                                          _vm._v(
-                                            "Bag Rate (" +
-                                              _vm._s(
-                                                item.pro_total_weight_in_bag
-                                              ) +
-                                              "KG): Rs " +
-                                              _vm._s(
-                                                item.pro_purchase_price_bag
-                                              )
-                                          )
-                                        ]
-                                      )
-                                ]),
-                                _vm._v(" "),
-                                _c("v-divider")
-                              ],
-                              1
-                            )
-                          ])
-                        ])
+                            _c("v-expansion-panel-content", [
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate : Rs " +
+                                            _vm._s(
+                                              item.pro_purchase_price_per_piece
+                                            )
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Sale Rate : Rs " +
+                                            _vm._s(
+                                              item.pro_purchase_price_per_kg
+                                            )
+                                        )
+                                      ]
+                                    )
+                              ]),
+                              _vm._v(" "),
+                              _c("p", [
+                                item.pro_type
+                                  ? _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Carton Rate (" +
+                                            _vm._s(
+                                              item.pro_total_piece_in_carton
+                                            ) +
+                                            "p): Rs " +
+                                            _vm._s(
+                                              item.pro_purchase_price_carton
+                                            )
+                                        )
+                                      ]
+                                    )
+                                  : _c(
+                                      "span",
+                                      { staticClass: "rate rate-right" },
+                                      [
+                                        _vm._v(
+                                          "Bag Rate (" +
+                                            _vm._s(
+                                              item.pro_total_weight_in_bag
+                                            ) +
+                                            "KG): Rs " +
+                                            _vm._s(item.pro_purchase_price_bag)
+                                        )
+                                      ]
+                                    )
+                              ])
+                            ])
+                          ],
+                          1
+                        )
                       ],
                       1
                     )
@@ -39721,7 +39789,7 @@ var render = function() {
       _c(
         "v-card-title",
         [
-          _vm._v("\n    Carton\n    "),
+          _vm._v("\n    Cartons\n    "),
           _c("v-spacer"),
           _vm._v(" "),
           _c("v-text-field", {
@@ -39732,11 +39800,11 @@ var render = function() {
               "hide-details": ""
             },
             model: {
-              value: _vm.search,
+              value: _vm.CartonSearch,
               callback: function($$v) {
-                _vm.search = $$v
+                _vm.CartonSearch = $$v
               },
-              expression: "search"
+              expression: "CartonSearch"
             }
           })
         ],
@@ -39744,13 +39812,95 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("v-data-table", {
-        attrs: { headers: _vm.headers, items: _vm.products, search: _vm.search }
+        attrs: {
+          headers: _vm.cartonHeaders,
+          items: _vm.cartonProducts,
+          search: _vm.CartonSearch
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "item",
+            fn: function(row) {
+              return [
+                _c("tr", [
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_purchase_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_purchase_price_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_retail_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(row.item.pro_retail_price_carton))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_whole_sale_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_whole_sale_price_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_total_piece_in_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mx-2",
+                          attrs: { dark: "", small: "", color: "blue" }
+                        },
+                        [
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-table-edit")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mx-2",
+                          attrs: { dark: "", small: "", color: "pink" }
+                        },
+                        [
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-delete")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ])
+              ]
+            }
+          }
+        ])
       }),
       _vm._v(" "),
       _c(
         "v-card-title",
         [
-          _vm._v("\n    Thala\n    "),
+          _vm._v("\n     Bags\n    "),
           _c("v-spacer"),
           _vm._v(" "),
           _c("v-text-field", {
@@ -39761,11 +39911,11 @@ var render = function() {
               "hide-details": ""
             },
             model: {
-              value: _vm.search,
+              value: _vm.bagSearch,
               callback: function($$v) {
-                _vm.search = $$v
+                _vm.bagSearch = $$v
               },
-              expression: "search"
+              expression: "bagSearch"
             }
           })
         ],
@@ -39773,7 +39923,11 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("v-data-table", {
-        attrs: { headers: _vm.header, items: _vm.product, search: _vm.search }
+        attrs: {
+          headers: _vm.header,
+          items: _vm.product,
+          search: _vm.bagSearch
+        }
       })
     ],
     1
@@ -39906,7 +40060,18 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { rules: _vm.nameRules, label: "Total Weight In Bag (KG)" },
+            attrs: { label: "Company Name" },
+            model: {
+              value: _vm.proBrand,
+              callback: function($$v) {
+                _vm.proBrand = $$v
+              },
+              expression: "proBrand"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            attrs: { type: "number", label: "Total Weight In Bag (KG)" },
             model: {
               value: _vm.totalWeight,
               callback: function($$v) {
@@ -39917,7 +40082,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { rules: _vm.nameRules, label: "Sale Price Per KG" },
+            attrs: { type: "number", label: "Sale Price Per KG" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetail()
@@ -39933,7 +40098,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { rules: _vm.nameRules, label: "Sale Price Bag" },
+            attrs: { type: "number", label: "Sale Price Bag" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetail()
@@ -39949,7 +40114,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Whole Sale Price Per KG" },
+            attrs: { type: "number", label: "Whole Sale Price Per KG" },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -39965,7 +40130,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Whole Sale Price Bag" },
+            attrs: { type: "number", label: "Whole Sale Price Bag" },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -39981,7 +40146,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Purched Price Per Piece" },
+            attrs: { type: "number", label: "Purched Price Per Piece" },
             on: {
               blur: function($event) {
                 return _vm.priceCalBuySale()
@@ -39997,7 +40162,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Purched Price Bag" },
+            attrs: { type: "number", label: "Purched Price Bag" },
             on: {
               blur: function($event) {
                 return _vm.priceCalBuySale()
@@ -40012,16 +40177,25 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-btn", { attrs: { color: "warning" } }, [
-            _vm._v("\r\n      Submit Product\r\n    ")
-          ]),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "warning" },
+              on: {
+                click: function($event) {
+                  return _vm.submitData()
+                }
+              }
+            },
+            [_vm._v("Submit Product")]
+          ),
           _vm._v(" "),
           _c(
             "v-btn",
             {
               staticClass: "mr-4",
               attrs: { color: "error" },
-              on: { click: _vm.reset }
+              on: { click: _vm.resetForm }
             },
             [_vm._v("\r\n      Reset Form\r\n    ")]
           )
@@ -40088,7 +40262,22 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Total Piece In carton" },
+            attrs: {
+              rules: _vm.nameRules,
+              label: "Company Name",
+              required: ""
+            },
+            model: {
+              value: _vm.proBrand,
+              callback: function($$v) {
+                _vm.proBrand = $$v
+              },
+              expression: "proBrand"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            attrs: { type: "number", label: "Total Piece In carton \\ Dozen" },
             model: {
               value: _vm.cartonTotalPiece,
               callback: function($$v) {
@@ -40099,7 +40288,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Sale Price Per Piece" },
+            attrs: { type: "number", label: "Sale Price Per Piece" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetailSale()
@@ -40115,7 +40304,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Sale Price Carton" },
+            attrs: { type: "number", label: "Sale Price Carton" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetailSale()
@@ -40131,7 +40320,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Whole Sale Price Per Piece" },
+            attrs: { type: "number", label: "Whole Sale Price Per Piece" },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -40147,7 +40336,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Whole Sale Price Carton" },
+            attrs: { type: "number", label: "Whole Sale Price Carton" },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -40163,7 +40352,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Purched Price Per Piece" },
+            attrs: { type: "number", label: "Purched Price Per Piece" },
             on: {
               blur: function($event) {
                 return _vm.priceCalBuy()
@@ -40179,7 +40368,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { label: "Purched Price Carton", required: "" },
+            attrs: {
+              type: "number",
+              label: "Purched Price Carton",
+              required: ""
+            },
             on: {
               blur: function($event) {
                 return _vm.priceCalBuy()
@@ -40212,7 +40405,7 @@ var render = function() {
             {
               staticClass: "mr-4",
               attrs: { color: "error" },
-              on: { click: _vm.reset }
+              on: { click: _vm.resetForm }
             },
             [_vm._v("Reset Form")]
           )
@@ -97030,6 +97223,11 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('App', __webpack_require__(/*! ./components/AppComponent */ "./resources/js/components/AppComponent.vue")["default"]); //Root Component
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.filter('capitalize', function (value) {
+  if (!value) return '';
+  value = value.toString();
+  return value.charAt(0).toUpperCase() + value.slice(1);
+});
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
   routes: _router__WEBPACK_IMPORTED_MODULE_3__["default"]
 });

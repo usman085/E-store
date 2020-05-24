@@ -28,7 +28,7 @@
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <form class="login100-form validate-form" autocomplete="no">
+                <form class="login100-form validate-form" autocomplete="no" method="POST" action="{{ route('login') }}">
                     <span class="login100-form-title ">
                        <img src="{{ asset('vendor/img/RB.png') }}" width="300px" >
 
@@ -36,14 +36,26 @@
 
 
                     <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                        <input class="input100" type="text" autocomplete="no" name="email">
+                        
+                        <input id="email" type="email" class="input100 form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                          @error('email')
+                                 <span class="invalid-feedback" role="alert">
+                                 <strong>{{ $message }}</strong> 
+                                 </span>
+                          @enderror
                         <span class="focus-input100"></span>
                         <span class="label-input100">Email</span>
                     </div>
 
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <input class="input100" type="password" name="pass">
+                    <input id="password" type="password" class="input100 form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                          @error('password')
+                               <span class="invalid-feedback" role="alert">
+                              <strong>{{ $message }}</strong>
+                                 </span>
+                            @enderror
                         <span class="focus-input100"></span>
                         <span class="label-input100">Password</span>
                     </div>
@@ -76,7 +88,7 @@
                         </span>
                     </div>
 
-                </form>
+                </method=>
 
                 <div class="login100-more" style="background-image: url('vendor/img/bg.jpg');">
                 </div>

@@ -13,6 +13,12 @@ Vue.component('App', require('./components/AppComponent').default); //Root Compo
 
 Vue.use(VueRouter);
 
+Vue.filter('capitalize', function(value) {
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+})
+
 const router = new VueRouter({
     routes
 });

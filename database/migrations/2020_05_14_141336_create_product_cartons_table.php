@@ -19,18 +19,18 @@ class CreateProductCartonsTable extends Migration
             $table->integer('pro_type')->nullable();
             $table->string('pro_brand')->nullable();
             $table->string('pro_bar_code')->nullable();
-            $table->integer('pro_retail_price_per_piece')->nullable();
-            $table->integer('pro_retail_price_carton')->nullable();
-            $table->integer('pro_whole_sale_price_per_piece')->nullable();
-            $table->integer('pro_whole_sale_price_carton')->nullable();
-            $table->integer('pro_purchase_price_per_piece')->nullable();
-            $table->integer('pro_purchase_price_carton')->nullable();
-            $table->integer('pro_total_piece_in_carton')->nullable();
+            $table->double('pro_retail_price_per_piece')->nullable();
+            $table->double('pro_retail_price_carton')->nullable();
+            $table->double('pro_whole_sale_price_per_piece')->nullable();
+            $table->double('pro_whole_sale_price_carton')->nullable();
+            $table->double('pro_purchase_price_per_piece')->nullable();
+            $table->double('pro_purchase_price_carton')->nullable();
+            $table->double('pro_total_piece_in_carton')->nullable();
             $table->integer('pro_shop_id')->nullable();
             $table->integer('add_or_changeBy')->nullable();
-            $table->string('pro_size')->nullable();
-            $table->string('pro_gram')->nullable();
-            $table->integer('pro_dozen_sale_price')->nullable();
+            $table->double('pro_size')->nullable();
+            $table->double('pro_gram')->nullable();
+            $table->double('pro_dozen_sale_price')->nullable();
             $table->timestamps();
         });
     }

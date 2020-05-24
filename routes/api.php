@@ -22,3 +22,7 @@ Route::get('/random-product','HomeController@RandamData');
 Route::get('/search-product/{searchQuery}','HomeController@SearchQuery');
 
 Route::post('/add-Carton-Product','AddProductController@addCartonProduct');
+
+Route::post('/add-Bag-Product','AddProductController@addBagProduct');
+
+Route::get('/all-carton','GetProducts@getAllProductCarton');
