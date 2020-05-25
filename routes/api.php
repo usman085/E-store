@@ -26,3 +26,13 @@ Route::post('/add-Carton-Product','AddProductController@addCartonProduct');
 Route::post('/add-Bag-Product','AddProductController@addBagProduct');
 
 Route::get('/all-carton','GetProducts@getAllProductCarton');
+
+Route::get('/all-bag','GetProducts@getAllProductBag');
+
+Route::get('/del-bag/{id}','DelProduct@delBagProduct');
+
+Route::get('/del-carton/{id}','DelProduct@delCartonProduct');
+
+Route::post('update-carton','UpdateProduct@updateCarton');
+
+Route::post('update-bag','UpdateProduct@updateBag');

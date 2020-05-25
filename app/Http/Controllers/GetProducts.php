@@ -12,4 +12,8 @@ class GetProducts extends Controller
         $ProductCartons=ProductCarton::all();
         return response()->json($ProductCartons);
     }
+    public function getAllProductBag(){
+        $ProductBag=ProductBag::all();
+        return response()->json($ProductBag);
+    }
 }

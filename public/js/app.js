@@ -2203,6 +2203,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ParticalsComponents_updateCartonProduct__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../ParticalsComponents/updateCartonProduct */ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue");
+/* harmony import */ var _ParticalsComponents_updateBagProduct__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ParticalsComponents/updateBagProduct */ "./resources/js/components/ParticalsComponents/updateBagProduct.vue");
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
 //
 //
 //
@@ -2277,20 +2280,153 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'productMange',
+  components: {
+    updateCartonProduct: _ParticalsComponents_updateCartonProduct__WEBPACK_IMPORTED_MODULE_0__["default"],
+    updateBagProduct: _ParticalsComponents_updateBagProduct__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('http://localhost:8000/api/all-carton').then(function (res) {
-      console.log(res);
-      _this.cartonProducts = res.data;
-    })["catch"](function (err) {
-      return console.log(err);
+    this.getAllCarton();
+    this.getAllBags();
+    _EventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('dialogBag', function () {
+      _this.updateBagModel = !_this.updateBagModel;
     });
+    _EventBus__WEBPACK_IMPORTED_MODULE_2__["default"].$on('dialogCarton', function () {
+      _this.updateCartonModel = !_this.updateCartonModel;
+    });
+  },
+  methods: {
+    UpdateModel: function UpdateModel(id) {
+      this.updateCartonModel = true;
+      this.updateCartonData = this.cartonProducts.find(function (data) {
+        return data.id === id;
+      });
+    },
+    UpdateModelBag: function UpdateModelBag(id) {
+      this.updateBagModel = true;
+      this.updateBagData = this.bagProducts.find(function (data) {
+        return data.id === id;
+      });
+    },
+    YesDelBag: function YesDelBag() {
+      this.delProduct(this.delId);
+      this.dialog = false;
+      this.pro_type = null;
+    },
+    NoDelBag: function NoDelBag() {
+      this.delBagId = null;
+      this.dialog = false;
+      this.pro_type = null;
+    },
+    delModel: function delModel(id, pro_type) {
+      this.dialog = true;
+      this.pro_type = parseInt(pro_type);
+      this.delId = id;
+    },
+    delProduct: function delProduct(id) {
+      var _this2 = this;
+
+      if (this.pro_type == 1) {
+        axios.get('http://localhost:8000/api/del-carton/' + id).then(function (res) {
+          console.log(res);
+
+          _this2.getAllCarton();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      } else {
+        axios.get('http://localhost:8000/api/del-bag/' + id).then(function (res) {
+          console.log(res);
+
+          _this2.getAllBags();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
+    },
+    getAllCarton: function getAllCarton() {
+      var _this3 = this;
+
+      axios.get('http://localhost:8000/api/all-carton').then(function (res) {
+        console.log(res);
+        _this3.cartonProducts = res.data;
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    },
+    getAllBags: function getAllBags() {
+      var _this4 = this;
+
+      axios.get('http://localhost:8000/api/all-bag').then(function (res) {
+        console.log(res);
+        _this4.bagProducts = res.data;
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    }
   },
   data: function data() {
     return {
+      delId: null,
+      updateCartonData: {},
+      updateBagData: {},
+      updateBagModel: false,
+      updateCartonModel: false,
+      pro_type: '',
+      dialog: false,
       CartonSearch: "",
       bagSearch: '',
       cartonHeaders: [{
@@ -2320,36 +2456,47 @@ __webpack_require__.r(__webpack_exports__);
         text: "Whole Sale Price Per Carton",
         value: "pro_whole_sale_price_carton"
       }, {
-        text: "Total Per Carton",
+        text: "Total Piece Per Carton",
         value: "pro_total_piece_in_carton"
       }, {
         text: "Action",
-        value: "pro_total_piece_in_carton"
+        value: "",
+        sortable: false
       }],
       cartonProducts: [],
       bagHeaders: [{
         text: "Product Name",
         align: "start",
         sortable: false,
-        value: "name"
+        value: "pro_name"
       }, {
-        text: "Purchase Price Per Thala",
-        value: "protein"
+        text: "Company Name",
+        value: "pro_brand"
       }, {
-        text: "Purchase Price Per Carton",
-        value: "iron"
+        text: "Purchase Price Per Kg",
+        value: "pro_purchase_price_per_kg"
       }, {
-        text: "Sale Price Per Piece",
-        value: "calories"
+        text: "Purchase Price Per Bag",
+        value: "pro_purchase_price_bag"
       }, {
-        text: "Sala Price Per Carton",
-        value: "fat"
+        text: "Sale Price Per Kg",
+        value: "pro_retail_price_per_kg"
       }, {
-        text: "Whole Sale Price Per Carton",
-        value: "carbs"
+        text: "Sala Price Per Bag",
+        value: "pro_retail_price_bag"
       }, {
-        text: "Total Per Carton",
-        value: "carbs"
+        text: "Whole Sale Price Per Kg",
+        value: "pro_whole_sale_price_per_kg"
+      }, {
+        text: "Whole Sale Price Per Bag",
+        value: "pro_whole_sale_price_bag"
+      }, {
+        text: "Total Weight in Bag",
+        value: "pro_total_weight_in_bag"
+      }, {
+        text: "Action",
+        value: "",
+        sortable: false
       }],
       bagProducts: []
     };
@@ -2652,6 +2799,279 @@ __webpack_require__.r(__webpack_exports__);
           this.salePricePerPiece = this.salePricecarton / this.cartonTotalPiece;
         }
       }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["dialog", "updateBagData"],
+  name: "updateBagProduct",
+  data: function data() {
+    return {};
+  },
+  methods: {
+    save: function save() {
+      axios.post('/api/update-bag', this.updateBagData).then(function (res) {
+        _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('dialogBag');
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["dialog", "updateCartonData"],
+  name: "updateCartonProduct",
+  data: function data() {
+    return {};
+  },
+  methods: {
+    save: function save() {
+      axios.post('/api/update-carton', this.updateCartonData).then(function (res) {
+        _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('dialogCarton');
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+      console.log(this.updateCartonData);
     }
   }
 });
@@ -39799,229 +40219,337 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c(
-    "v-card",
+    "div",
+    { staticClass: "wrapper-data-tables" },
     [
       _c(
-        "v-card-title",
+        "v-card",
         [
-          _vm._v("\n    Cartons\n    "),
-          _c("v-spacer"),
+          _c(
+            "v-card-title",
+            [
+              _vm._v("\r\n      Cartons\r\n      "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  "append-icon": "mdi-magnify",
+                  label: "Search",
+                  "single-line": "",
+                  "hide-details": ""
+                },
+                model: {
+                  value: _vm.CartonSearch,
+                  callback: function($$v) {
+                    _vm.CartonSearch = $$v
+                  },
+                  expression: "CartonSearch"
+                }
+              })
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("v-text-field", {
+          _c("v-data-table", {
             attrs: {
-              "append-icon": "mdi-magnify",
-              label: "Search",
-              "single-line": "",
-              "hide-details": ""
+              headers: _vm.cartonHeaders,
+              items: _vm.cartonProducts,
+              search: _vm.CartonSearch
             },
-            model: {
-              value: _vm.CartonSearch,
-              callback: function($$v) {
-                _vm.CartonSearch = $$v
-              },
-              expression: "CartonSearch"
-            }
+            scopedSlots: _vm._u([
+              {
+                key: "item",
+                fn: function(row) {
+                  return [
+                    _c("tr", [
+                      _c("td", [
+                        _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_purchase_price_per_piece))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_purchase_price_carton))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_retail_price_per_piece))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_retail_price_carton))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_whole_sale_price_per_piece))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_whole_sale_price_carton))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_total_piece_in_carton))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: { dark: "", small: "", color: "blue" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.UpdateModel(row.item.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-table-edit")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: { dark: "", small: "", color: "pink" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.delModel(
+                                    row.item.id,
+                                    row.item.pro_type
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-delete")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  ]
+                }
+              }
+            ])
+          }),
+          _vm._v(" "),
+          _c(
+            "v-card-title",
+            [
+              _vm._v("\r\n       Bags\r\n      "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c("v-text-field", {
+                attrs: {
+                  "append-icon": "mdi-magnify",
+                  label: "Search",
+                  "single-line": "",
+                  "hide-details": ""
+                },
+                model: {
+                  value: _vm.bagSearch,
+                  callback: function($$v) {
+                    _vm.bagSearch = $$v
+                  },
+                  expression: "bagSearch"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("v-data-table", {
+            attrs: {
+              headers: _vm.bagHeaders,
+              items: _vm.bagProducts,
+              search: _vm.bagSearch
+            },
+            scopedSlots: _vm._u([
+              {
+                key: "item",
+                fn: function(row) {
+                  return [
+                    _c("tr", [
+                      _c("td", [
+                        _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_purchase_price_per_kg))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_purchase_price_bag))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_retail_price_per_kg))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(row.item.pro_retail_price_bag))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_whole_sale_price_per_kg))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_whole_sale_price_bag))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(row.item.pro_total_weight_in_bag))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: { dark: "", small: "", color: "blue" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.UpdateModelBag(row.item.id)
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-table-edit")
+                              ])
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              staticClass: "mx-2",
+                              attrs: { dark: "", small: "", color: "pink" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.delModel(
+                                    row.item.id,
+                                    row.item.pro_type
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("v-icon", { attrs: { dark: "" } }, [
+                                _vm._v("mdi-delete")
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  ]
+                }
+              }
+            ])
           })
         ],
         1
       ),
       _vm._v(" "),
-      _c("v-data-table", {
+      _c("updateCartonProduct", {
         attrs: {
-          headers: _vm.cartonHeaders,
-          items: _vm.cartonProducts,
-          search: _vm.CartonSearch
-        },
-        scopedSlots: _vm._u([
-          {
-            key: "item",
-            fn: function(row) {
-              return [
-                _c("tr", [
-                  _c("td", [
-                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_purchase_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_purchase_price_carton))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_retail_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(row.item.pro_retail_price_carton))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_whole_sale_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_whole_sale_price_carton))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_total_piece_in_carton))
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "td",
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: { dark: "", small: "", color: "blue" }
-                        },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-table-edit")
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: { dark: "", small: "", color: "pink" }
-                        },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-delete")
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ])
-              ]
-            }
-          }
-        ])
+          dialog: _vm.updateCartonModel,
+          updateCartonData: _vm.updateCartonData
+        }
+      }),
+      _vm._v(" "),
+      _c("updateBagProduct", {
+        attrs: { dialog: _vm.updateBagModel, updateBagData: _vm.updateBagData }
       }),
       _vm._v(" "),
       _c(
-        "v-card-title",
-        [
-          _vm._v("\n     Bags\n    "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c("v-text-field", {
-            attrs: {
-              "append-icon": "mdi-magnify",
-              label: "Search",
-              "single-line": "",
-              "hide-details": ""
+        "v-dialog",
+        {
+          attrs: { "max-width": "290" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
             },
-            model: {
-              value: _vm.bagSearch,
-              callback: function($$v) {
-                _vm.bagSearch = $$v
-              },
-              expression: "bagSearch"
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("v-data-table", {
-        attrs: {
-          headers: _vm.bagHeaders,
-          items: _vm.bagProduct,
-          search: _vm.bagSearch
+            expression: "dialog"
+          }
         },
-        scopedSlots: _vm._u([
-          {
-            key: "item",
-            fn: function(row) {
-              return [
-                _c("tr", [
-                  _c("td", [
-                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_purchase_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_purchase_price_carton))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_retail_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(row.item.pro_retail_price_carton))]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_whole_sale_price_per_piece))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_whole_sale_price_carton))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [
-                    _vm._v(_vm._s(row.item.pro_total_piece_in_carton))
-                  ]),
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", { staticClass: "headline" }, [
+                _vm._v("Are You Sure to Delete this Product ? ")
+              ]),
+              _vm._v(" "),
+              _c("v-card-text", [
+                _vm._v(
+                  "\r\n         Select Yes / NO .If You Select Yes this Product is remove. If you select No then Product would not be \r\n         remove    \r\n        "
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
                   _vm._v(" "),
                   _c(
-                    "td",
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: { dark: "", small: "", color: "blue" }
-                        },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-table-edit")
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-2",
-                          attrs: { dark: "", small: "", color: "pink" }
-                        },
-                        [
-                          _c("v-icon", { attrs: { dark: "" } }, [
-                            _vm._v("mdi-delete")
-                          ])
-                        ],
-                        1
-                      )
-                    ],
-                    1
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.YesDelBag()
+                        }
+                      }
+                    },
+                    [_vm._v("\r\n            Yes\r\n          ")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "green darken-1", text: "" },
+                      on: { click: _vm.NoDelBag }
+                    },
+                    [_vm._v("\r\n            No\r\n          ")]
                   )
-                ])
-              ]
-            }
-          }
-        ])
-      })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -40501,6 +41029,675 @@ var render = function() {
               on: { click: _vm.resetForm }
             },
             [_vm._v("Reset Form")]
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9&":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9& ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-row",
+    { attrs: { justify: "center" } },
+    [
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "800px" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _c("span", { staticClass: "headline" }, [_vm._v("Edit Bag")])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "12" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Product Name*", required: "" },
+                                model: {
+                                  value: _vm.updateBagData.pro_name,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.updateBagData, "pro_name", $$v)
+                                  },
+                                  expression: "updateBagData.pro_name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Company Name" },
+                                model: {
+                                  value: _vm.updateBagData.pro_brand,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_brand",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "updateBagData.pro_brand"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Total Weight in Bag",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateBagData.pro_total_weight_in_bag,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_total_weight_in_bag",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_total_weight_in_bag"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Purchase Price Per Kg",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateBagData.pro_purchase_price_per_kg,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_purchase_price_per_kg",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_purchase_price_per_kg"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Purchase Price Bag" },
+                                model: {
+                                  value:
+                                    _vm.updateBagData.pro_purchase_price_bag,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_purchase_price_bag",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_purchase_price_bag"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Whole Sale Price Per Kg",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateBagData
+                                      .pro_whole_sale_price_per_kg,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_whole_sale_price_per_kg",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_whole_sale_price_per_kg"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Whole Sale Price Bag" },
+                                model: {
+                                  value:
+                                    _vm.updateBagData.pro_whole_sale_price_bag,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_whole_sale_price_bag",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_whole_sale_price_bag"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Retail Price Per Kg",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateBagData.pro_retail_price_per_kg,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_retail_price_per_kg",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_retail_price_per_kg"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Retail Price Bag" },
+                                model: {
+                                  value: _vm.updateBagData.pro_retail_price_bag,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateBagData,
+                                      "pro_retail_price_bag",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateBagData.pro_retail_price_bag"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("small", [_vm._v("*indicates required field")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.close()
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.save()
+                        }
+                      }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-row",
+    { attrs: { justify: "center" } },
+    [
+      _c(
+        "v-dialog",
+        {
+          attrs: { persistent: "", "max-width": "800px" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _c("span", { staticClass: "headline" }, [_vm._v("Edit Carton")])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    [
+                      _c(
+                        "v-row",
+                        [
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "12", md: "12" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Product Name*", required: "" },
+                                model: {
+                                  value: _vm.updateCartonData.pro_name,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_name",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "updateCartonData.pro_name"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Company Name" },
+                                model: {
+                                  value: _vm.updateCartonData.pro_brand,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_brand",
+                                      $$v
+                                    )
+                                  },
+                                  expression: "updateCartonData.pro_brand"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Total Piece Per Carton",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_total_piece_in_carton,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_total_piece_in_carton",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_total_piece_in_carton"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Purchase Price Per Piece",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_purchase_price_per_piece,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_purchase_price_per_piece",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_purchase_price_per_piece"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Purchase Price Carton" },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_purchase_price_carton,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_purchase_price_carton",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_purchase_price_carton"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Whole Sale Price Per Piece",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_whole_sale_price_per_piece,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_whole_sale_price_per_piece",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_whole_sale_price_per_piece"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Whole Sale Price Carton" },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_whole_sale_price_carton,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_whole_sale_price_carton",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_whole_sale_price_carton"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: {
+                                  label: "Retail Price Per Piece",
+                                  required: ""
+                                },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_retail_price_per_piece,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_retail_price_per_piece",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_retail_price_per_piece"
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-col",
+                            { attrs: { cols: "12", sm: "6", md: "6" } },
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Retail Price Carton" },
+                                model: {
+                                  value:
+                                    _vm.updateCartonData
+                                      .pro_retail_price_carton,
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.updateCartonData,
+                                      "pro_retail_price_carton",
+                                      $$v
+                                    )
+                                  },
+                                  expression:
+                                    "updateCartonData.pro_retail_price_carton"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("small", [_vm._v("*indicates required field")])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.close()
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          return _vm.save()
+                        }
+                      }
+                    },
+                    [_vm._v("Save")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
           )
         ],
         1
@@ -98014,6 +99211,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addCartonForm_vue_vue_type_template_id_5177102b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addCartonForm_vue_vue_type_template_id_5177102b_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateBagProduct.vue":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateBagProduct.vue ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./updateBagProduct.vue?vue&type=template&id=03c01ff9& */ "./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9&");
+/* harmony import */ var _updateBagProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./updateBagProduct.vue?vue&type=script&lang=js& */ "./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _updateBagProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ParticalsComponents/updateBagProduct.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_updateBagProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./updateBagProduct.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_updateBagProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9&":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9& ***!
+  \*********************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./updateBagProduct.vue?vue&type=template&id=03c01ff9& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateBagProduct.vue?vue&type=template&id=03c01ff9&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateBagProduct_vue_vue_type_template_id_03c01ff9___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateCartonProduct.vue ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./updateCartonProduct.vue?vue&type=template&id=1186ea2e& */ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e&");
+/* harmony import */ var _updateCartonProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./updateCartonProduct.vue?vue&type=script&lang=js& */ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _updateCartonProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/ParticalsComponents/updateCartonProduct.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_updateCartonProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./updateCartonProduct.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_updateCartonProduct_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e&":
+/*!************************************************************************************************************!*\
+  !*** ./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e& ***!
+  \************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./updateCartonProduct.vue?vue&type=template&id=1186ea2e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ParticalsComponents/updateCartonProduct.vue?vue&type=template&id=1186ea2e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_updateCartonProduct_vue_vue_type_template_id_1186ea2e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
