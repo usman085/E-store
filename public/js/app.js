@@ -2255,6 +2255,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'productMange',
   mounted: function mounted() {
@@ -2305,7 +2327,7 @@ __webpack_require__.r(__webpack_exports__);
         value: "pro_total_piece_in_carton"
       }],
       cartonProducts: [],
-      header: [{
+      bagHeaders: [{
         text: "Product Name",
         align: "start",
         sortable: false,
@@ -2329,14 +2351,7 @@ __webpack_require__.r(__webpack_exports__);
         text: "Total Per Carton",
         value: "carbs"
       }],
-      product: [{
-        name: "KitKat",
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: "6%"
-      }]
+      bagProducts: []
     };
   }
 });
@@ -39924,10 +39939,88 @@ var render = function() {
       _vm._v(" "),
       _c("v-data-table", {
         attrs: {
-          headers: _vm.header,
-          items: _vm.product,
+          headers: _vm.bagHeaders,
+          items: _vm.bagProduct,
           search: _vm.bagSearch
-        }
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "item",
+            fn: function(row) {
+              return [
+                _c("tr", [
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_name)))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(_vm._f("capitalize")(row.item.pro_brand)))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_purchase_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_purchase_price_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_retail_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(row.item.pro_retail_price_carton))]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_whole_sale_price_per_piece))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_whole_sale_price_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _vm._v(_vm._s(row.item.pro_total_piece_in_carton))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mx-2",
+                          attrs: { dark: "", small: "", color: "blue" }
+                        },
+                        [
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-table-edit")
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "mx-2",
+                          attrs: { dark: "", small: "", color: "pink" }
+                        },
+                        [
+                          _c("v-icon", { attrs: { dark: "" } }, [
+                            _vm._v("mdi-delete")
+                          ])
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ])
+              ]
+            }
+          }
+        ])
       })
     ],
     1

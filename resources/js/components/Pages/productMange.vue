@@ -46,7 +46,29 @@
         hide-details
       ></v-text-field>
     </v-card-title>
-    <v-data-table :headers="header" :items="product" :search="bagSearch"></v-data-table>
+    <v-data-table :headers="bagHeaders" :items="bagProduct" :search="bagSearch">
+       <template v-slot:item="row">
+          <tr>
+            <td>{{row.item.pro_name | capitalize }}</td>
+            <td>{{row.item.pro_brand | capitalize }}</td>
+            <td>{{row.item.pro_purchase_price_per_piece}}</td>
+            <td>{{ row.item.pro_purchase_price_carton }}</td>
+            <td>{{ row.item.pro_retail_price_per_piece }}</td>
+             <td>{{ row.item.pro_retail_price_carton }}</td>
+             <td>{{ row.item.pro_whole_sale_price_per_piece }}</td>
+             <td>{{ row.item.pro_whole_sale_price_carton }}</td>
+             <td>{{ row.item.pro_total_piece_in_carton }}</td>
+            <td>
+               <v-btn class="mx-2"  dark small color="blue" >
+                    <v-icon dark>mdi-table-edit</v-icon>
+                </v-btn>
+                <v-btn class="mx-2"  dark small color="pink" >
+                    <v-icon dark>mdi-delete</v-icon>
+                </v-btn>
+            </td>
+          </tr>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -81,7 +103,7 @@ export default {
         { text: "Action", value: "pro_total_piece_in_carton" }
       ],
       cartonProducts: [],
-      header: [
+      bagHeaders: [
         {
           text: "Product Name",
           align: "start",
@@ -95,16 +117,7 @@ export default {
         { text: "Whole Sale Price Per Carton", value: "carbs" },
         { text: "Total Per Carton", value: "carbs" }
       ],
-      product: [
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%"
-        }
-      ]
+      bagProducts: []
     };
   }
 };
