@@ -60,7 +60,7 @@
                      data: body
                   })
                  .then(response=>{
-                   console.log(response);
+                 
                    this.resetForm();
                     })
                      .catch(function (error) {

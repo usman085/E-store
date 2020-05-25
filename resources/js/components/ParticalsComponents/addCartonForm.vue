@@ -4,17 +4,17 @@
   <v-form ref="form" v-model="valid" lazy-validation>
 
     <v-text-field v-model="proName"  :rules="nameRules" label="Product Name" required></v-text-field>
-     <v-text-field v-model="proBrand"  :rules="nameRules" label="Company Name" required></v-text-field>
-     <v-text-field v-model="cartonTotalPiece" type="number"  label="Total Piece In carton \ Dozen"   ></v-text-field>
+     <v-text-field v-model="proBrand"   label="Company Name" required></v-text-field>
+     <v-text-field v-model="cartonTotalPiece" type="number" min="0"  label="Total Piece In carton \ Dozen"   ></v-text-field>
     
-    <v-text-field v-model="salePricePerPiece" type="number"  @blur="priceCalRetailSale()" label="Sale Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="salePricecarton" type="number"  @blur="priceCalRetailSale()"  label="Sale Price Carton"   ></v-text-field>
+    <v-text-field v-model="salePricePerPiece" type="number" min="0"  @blur="priceCalRetailSale()" label="Sale Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="salePricecarton" type="number" min="0"  @blur="priceCalRetailSale()"  label="Sale Price Carton"   ></v-text-field>
 
-     <v-text-field v-model="wholeSalePricePerPiece" type="number"  @blur="priceCalWholeSale()" label="Whole Sale Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="wholeSalePricecarton" type="number"  label="Whole Sale Price Carton" @blur="priceCalWholeSale()"   ></v-text-field>
+     <v-text-field v-model="wholeSalePricePerPiece" type="number" min="0"  @blur="priceCalWholeSale()" label="Whole Sale Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="wholeSalePricecarton" type="number" min="0"  label="Whole Sale Price Carton" @blur="priceCalWholeSale()"   ></v-text-field>
  
-  <v-text-field v-model="buyPricePerPiece" type="number"  @blur="priceCalBuy()"  label="Purched Price Per Piece"   ></v-text-field>
-    <v-text-field v-model="buyPricecarton" type="number"   @blur="priceCalBuy()" label="Purched Price Carton"  required ></v-text-field>
+  <v-text-field v-model="buyPricePerPiece" type="number" min="0"  @blur="priceCalBuy()"  label="Purched Price Per Piece"   ></v-text-field>
+    <v-text-field v-model="buyPricecarton" type="number" min="0"   @blur="priceCalBuy()" label="Purched Price Carton"  required ></v-text-field>
 
  <v-btn color="warning" @click="submitData()"> Submit Product</v-btn>
 <v-btn  color="error" class="mr-4" @click="resetForm">Reset Form</v-btn>

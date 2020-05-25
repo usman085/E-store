@@ -28,7 +28,7 @@
                                 <v-text-field
                                     label="Total Weight in Bag"
                                     required
-                                     
+                                      type="number" min="0"
                                     v-model="updateBagData.pro_total_weight_in_bag"
                                 ></v-text-field>
                             </v-col>
@@ -38,13 +38,13 @@
                                 <v-text-field
                                     label="Purchase Price Per Kg"
                                     required
-                                   
-
+                                   type="number" min="0"
                                     v-model="updateBagData.pro_purchase_price_per_kg"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field
+                                type="number" min="0"
                                     label="Purchase Price Bag"
                                    v-model="updateBagData.pro_purchase_price_bag"
                                    
@@ -56,13 +56,14 @@
                                 <v-text-field
                                     label="Whole Sale Price Per Kg"
                                     required
+                                    type="number" min="0"
                                     v-model="updateBagData.pro_whole_sale_price_per_kg"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field
                                     label="Whole Sale Price Bag"
-                                   
+                                    type="number" min="0"
                                    v-model="updateBagData.pro_whole_sale_price_bag"
                                 ></v-text-field>
                             </v-col>
@@ -71,14 +72,14 @@
                                 <v-text-field
                                     label="Retail Price Per Kg"
                                     required
-                                    
-
+                                    type="number" min="0"
                                     v-model="updateBagData.pro_retail_price_per_kg"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field
                                     label="Retail Price Bag"
+                                    type="number" min="0"
                                      v-model="updateBagData.pro_retail_price_bag"
                                                                   ></v-text-field>
                             </v-col>
@@ -118,6 +119,9 @@ export default {
                 
              EventBus.$emit('dialogBag');
             }).catch(err=>console.log(err))
+        },
+         close:function(){
+             EventBus.$emit('dialogBag');
         }
     }
 };

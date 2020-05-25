@@ -26,6 +26,7 @@
 
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field
+                                type="number" min="0"
                                     label="Total Piece Per Carton"
                                     required
                                      
@@ -38,7 +39,7 @@
                                 <v-text-field
                                     label="Purchase Price Per Piece"
                                     required
-                                   
+                                   type="number" min="0"
 
                                     v-model="updateCartonData.pro_purchase_price_per_piece"
                                 ></v-text-field>
@@ -47,7 +48,7 @@
                                 <v-text-field
                                     label="Purchase Price Carton"
                                    v-model="updateCartonData.pro_purchase_price_carton"
-                                   
+                                   type="number" min="0"
                                 ></v-text-field>
                             </v-col>
 
@@ -56,13 +57,14 @@
                                 <v-text-field
                                     label="Whole Sale Price Per Piece"
                                     required
+                                    type="number" min="0"
                                     v-model="updateCartonData.pro_whole_sale_price_per_piece"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                                 <v-text-field
                                     label="Whole Sale Price Carton"
-                                   
+                                   type="number" min="0"
                                    v-model="updateCartonData.pro_whole_sale_price_carton"
                                 ></v-text-field>
                             </v-col>
@@ -71,7 +73,7 @@
                                 <v-text-field
                                     label="Retail Price Per Piece"
                                     required
-                                    
+                                    type="number" min="0"
 
                                     v-model="updateCartonData.pro_retail_price_per_piece"
                                 ></v-text-field>
@@ -80,6 +82,7 @@
                                 <v-text-field
                                     label="Retail Price Carton"
                                      v-model="updateCartonData.pro_retail_price_carton"
+                                     type="number" min="0"
                                                                   ></v-text-field>
                             </v-col>
 
@@ -118,6 +121,9 @@ export default {
                  EventBus.$emit('dialogCarton');
             }).catch(err=>console.log(err))
             console.log(this.updateCartonData);
+        },
+        close:function(){
+             EventBus.$emit('dialogCarton');
         }
     }
 };

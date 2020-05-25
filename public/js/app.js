@@ -2115,27 +2115,24 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
-    axios.get('http://localhost:8000/api/random-product').then(function (data) {
+    axios.get('http://RanaStore.azadtv.pk/api/random-product').then(function (data) {
       _this.items = data.data;
       _this.loading = false;
-      console.log(data);
     })["catch"](function () {
       return console.log('Error In serve');
     });
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('searchRefresh', function (searchRefresh) {
       if (searchRefresh != ' ' && searchRefresh.length > 2) {
-        axios.get('http://localhost:8000/api/search-product/' + searchRefresh).then(function (data) {
+        axios.get('http://RanaStore.azadtv.pk/api/search-product/' + searchRefresh).then(function (data) {
           _this.items = data.data;
           _this.loading = false;
-          console.log(data);
         })["catch"](function () {
           return console.log('Error In serve');
         });
       } else {
-        axios.get('http://localhost:8000/api/random-product').then(function (data) {
+        axios.get('http://RanaStore.azadtv.pk/api/random-product').then(function (data) {
           _this.items = data.data;
           _this.loading = false;
-          console.log(data);
         })["catch"](function () {
           return console.log('Error In serve');
         });
@@ -2143,10 +2140,9 @@ __webpack_require__.r(__webpack_exports__);
     });
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('searchTrigger', function (searchQuery) {
       _this.loading = true;
-      axios.get('http://localhost:8000/api/search-product/' + searchQuery).then(function (data) {
+      axios.get('http://RanaStore.azadtv.pk/api/search-product/' + searchQuery).then(function (data) {
         _this.items = data.data;
         _this.loading = false;
-        console.log(data);
       })["catch"](function () {
         return console.log('Error In serve');
       });
@@ -2380,17 +2376,13 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       if (this.pro_type == 1) {
-        axios.get('http://localhost:8000/api/del-carton/' + id).then(function (res) {
-          console.log(res);
-
+        axios.get('http://RanaStore.azadtv.pk/api/del-carton/' + id).then(function (res) {
           _this2.getAllCarton();
         })["catch"](function (err) {
           return console.log(err);
         });
       } else {
-        axios.get('http://localhost:8000/api/del-bag/' + id).then(function (res) {
-          console.log(res);
-
+        axios.get('http://RanaStore.azadtv.pk/api/del-bag/' + id).then(function (res) {
           _this2.getAllBags();
         })["catch"](function (err) {
           return console.log(err);
@@ -2400,8 +2392,7 @@ __webpack_require__.r(__webpack_exports__);
     getAllCarton: function getAllCarton() {
       var _this3 = this;
 
-      axios.get('http://localhost:8000/api/all-carton').then(function (res) {
-        console.log(res);
+      axios.get('http://RanaStore.azadtv.pk/api/all-carton').then(function (res) {
         _this3.cartonProducts = res.data;
       })["catch"](function (err) {
         return console.log(err);
@@ -2410,8 +2401,7 @@ __webpack_require__.r(__webpack_exports__);
     getAllBags: function getAllBags() {
       var _this4 = this;
 
-      axios.get('http://localhost:8000/api/all-bag').then(function (res) {
-        console.log(res);
+      axios.get('http://RanaStore.azadtv.pk/api/all-bag').then(function (res) {
         _this4.bagProducts = res.data;
       })["catch"](function (err) {
         return console.log(err);
@@ -2456,7 +2446,7 @@ __webpack_require__.r(__webpack_exports__);
         text: "Whole Sale Price Per Carton",
         value: "pro_whole_sale_price_carton"
       }, {
-        text: "Total Piece Per Carton",
+        text: "Total Piece in Carton",
         value: "pro_total_piece_in_carton"
       }, {
         text: "Action",
@@ -2640,8 +2630,6 @@ __webpack_require__.r(__webpack_exports__);
         url: '/api/add-Bag-Product',
         data: body
       }).then(function (response) {
-        console.log(response);
-
         _this.resetForm();
       })["catch"](function (error) {
         console.log(error);
@@ -2921,6 +2909,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dialog", "updateBagData"],
@@ -2935,6 +2924,9 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
+    },
+    close: function close() {
+      _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('dialogBag');
     }
   }
 });
@@ -3057,6 +3049,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["dialog", "updateCartonData"],
@@ -3072,6 +3067,9 @@ __webpack_require__.r(__webpack_exports__);
         return console.log(err);
       });
       console.log(this.updateCartonData);
+    },
+    close: function close() {
+      _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('dialogCarton');
     }
   }
 });
@@ -39935,7 +39933,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("v-expansion-panel-content", [
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-left" },
@@ -39961,7 +39959,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-right" },
@@ -40005,7 +40003,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("v-expansion-panel-content", [
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-left" },
@@ -40033,7 +40031,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-right" },
@@ -40081,7 +40079,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("v-expansion-panel-content", [
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-right" },
@@ -40109,7 +40107,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("p", [
-                                item.pro_type
+                                item.pro_type == "1"
                                   ? _c(
                                       "span",
                                       { staticClass: "rate rate-right" },
@@ -40883,11 +40881,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: {
-              rules: _vm.nameRules,
-              label: "Company Name",
-              required: ""
-            },
+            attrs: { label: "Company Name", required: "" },
             model: {
               value: _vm.proBrand,
               callback: function($$v) {
@@ -40898,7 +40892,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Total Piece In carton \\ Dozen" },
+            attrs: {
+              type: "number",
+              min: "0",
+              label: "Total Piece In carton \\ Dozen"
+            },
             model: {
               value: _vm.cartonTotalPiece,
               callback: function($$v) {
@@ -40909,7 +40907,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Sale Price Per Piece" },
+            attrs: { type: "number", min: "0", label: "Sale Price Per Piece" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetailSale()
@@ -40925,7 +40923,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Sale Price Carton" },
+            attrs: { type: "number", min: "0", label: "Sale Price Carton" },
             on: {
               blur: function($event) {
                 return _vm.priceCalRetailSale()
@@ -40941,7 +40939,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Whole Sale Price Per Piece" },
+            attrs: {
+              type: "number",
+              min: "0",
+              label: "Whole Sale Price Per Piece"
+            },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -40957,7 +40959,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Whole Sale Price Carton" },
+            attrs: {
+              type: "number",
+              min: "0",
+              label: "Whole Sale Price Carton"
+            },
             on: {
               blur: function($event) {
                 return _vm.priceCalWholeSale()
@@ -40973,7 +40979,11 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("v-text-field", {
-            attrs: { type: "number", label: "Purched Price Per Piece" },
+            attrs: {
+              type: "number",
+              min: "0",
+              label: "Purched Price Per Piece"
+            },
             on: {
               blur: function($event) {
                 return _vm.priceCalBuy()
@@ -40991,6 +41001,7 @@ var render = function() {
           _c("v-text-field", {
             attrs: {
               type: "number",
+              min: "0",
               label: "Purched Price Carton",
               required: ""
             },
@@ -41139,7 +41150,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Total Weight in Bag",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41166,7 +41179,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Purchase Price Per Kg",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41191,7 +41206,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Purchase Price Bag" },
+                                attrs: {
+                                  type: "number",
+                                  min: "0",
+                                  label: "Purchase Price Bag"
+                                },
                                 model: {
                                   value:
                                     _vm.updateBagData.pro_purchase_price_bag,
@@ -41217,7 +41236,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Whole Sale Price Per Kg",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41243,7 +41264,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Whole Sale Price Bag" },
+                                attrs: {
+                                  label: "Whole Sale Price Bag",
+                                  type: "number",
+                                  min: "0"
+                                },
                                 model: {
                                   value:
                                     _vm.updateBagData.pro_whole_sale_price_bag,
@@ -41269,7 +41294,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Retail Price Per Kg",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41294,7 +41321,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Retail Price Bag" },
+                                attrs: {
+                                  label: "Retail Price Bag",
+                                  type: "number",
+                                  min: "0"
+                                },
                                 model: {
                                   value: _vm.updateBagData.pro_retail_price_bag,
                                   callback: function($$v) {
@@ -41471,6 +41502,8 @@ var render = function() {
                             [
                               _c("v-text-field", {
                                 attrs: {
+                                  type: "number",
+                                  min: "0",
                                   label: "Total Piece Per Carton",
                                   required: ""
                                 },
@@ -41500,7 +41533,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Purchase Price Per Piece",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41526,7 +41561,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Purchase Price Carton" },
+                                attrs: {
+                                  label: "Purchase Price Carton",
+                                  type: "number",
+                                  min: "0"
+                                },
                                 model: {
                                   value:
                                     _vm.updateCartonData
@@ -41553,7 +41592,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Whole Sale Price Per Piece",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41579,7 +41620,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Whole Sale Price Carton" },
+                                attrs: {
+                                  label: "Whole Sale Price Carton",
+                                  type: "number",
+                                  min: "0"
+                                },
                                 model: {
                                   value:
                                     _vm.updateCartonData
@@ -41606,7 +41651,9 @@ var render = function() {
                               _c("v-text-field", {
                                 attrs: {
                                   label: "Retail Price Per Piece",
-                                  required: ""
+                                  required: "",
+                                  type: "number",
+                                  min: "0"
                                 },
                                 model: {
                                   value:
@@ -41632,7 +41679,11 @@ var render = function() {
                             { attrs: { cols: "12", sm: "6", md: "6" } },
                             [
                               _c("v-text-field", {
-                                attrs: { label: "Retail Price Carton" },
+                                attrs: {
+                                  label: "Retail Price Carton",
+                                  type: "number",
+                                  min: "0"
+                                },
                                 model: {
                                   value:
                                     _vm.updateCartonData

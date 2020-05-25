@@ -164,14 +164,14 @@ export default {
       delProduct:function(id){
       
         if(this.pro_type == 1){
-            axios.get('http://localhost:8000/api/del-carton/'+id).then(res=>{
-               console.log(res);
+            axios.get('http://RanaStore.azadtv.pk/api/del-carton/'+id).then(res=>{
+              
                   this.getAllCarton();
           }).catch(err=>console.log(err));
       }else{
          
-           axios.get('http://localhost:8000/api/del-bag/'+id).then(res=>{
-               console.log(res);
+           axios.get('http://RanaStore.azadtv.pk/api/del-bag/'+id).then(res=>{
+              
                   this.getAllBags();
           }).catch(err=>console.log(err));
 
@@ -180,14 +180,14 @@ export default {
         
         },
       getAllCarton:function(){
-              axios.get('http://localhost:8000/api/all-carton').then(res=>{
-              console.log(res);
+              axios.get('http://RanaStore.azadtv.pk/api/all-carton').then(res=>{
+              
               this.cartonProducts=res.data;
             }).catch(err=>console.log(err));
       },
         getAllBags:function(){
-          axios.get('http://localhost:8000/api/all-bag').then(res=>{
-        console.log(res);
+          axios.get('http://RanaStore.azadtv.pk/api/all-bag').then(res=>{
+       
         this.bagProducts=res.data;
       }).catch(err=>console.log(err));
         }
@@ -217,7 +217,7 @@ export default {
         { text: "Sala Price Per Carton", value: "pro_retail_price_carton" },
         { text: "Whole Sale Price Per Piece", value: "pro_whole_sale_price_per_piece" },
         { text: "Whole Sale Price Per Carton", value: "pro_whole_sale_price_carton" },
-        { text: "Total Piece Per Carton", value: "pro_total_piece_in_carton" },
+        { text: "Total Piece in Carton", value: "pro_total_piece_in_carton" },
         { text: "Action", value: "",sortable: false, }
       ],
       cartonProducts: [],

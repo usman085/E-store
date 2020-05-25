@@ -26,11 +26,11 @@
           <v-expansion-panel-header>Sale Price</v-expansion-panel-header>
           <v-expansion-panel-content>
                <p>
-                    <span class="rate rate-left" v-if="item.pro_type">Sale Rate: Rs {{ item.pro_retail_price_per_piece }}</span>
+                    <span class="rate rate-left" v-if="item.pro_type == '1' ">Sale Rate: Rs {{ item.pro_retail_price_per_piece }}</span>
                     <span class="rate rate-left" v-else>Sale Rate: Rs {{ item.pro_retail_price_per_kg }}</span>
                </p>
                <p>
-                    <span class="rate rate-right" v-if="item.pro_type">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_retail_price_carton }}</span>
+                    <span class="rate rate-right" v-if="item.pro_type == '1'">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_retail_price_carton }}</span>
                     <span class="rate rate-right"  v-else>Bag Rate ({{ item.pro_total_weight_in_bag }}KG): Rs {{ item.pro_retail_price_bag }}</span>
               </p>
           </v-expansion-panel-content>
@@ -40,11 +40,11 @@
           <v-expansion-panel-header>Whole Sale Price</v-expansion-panel-header>
           <v-expansion-panel-content>
             <p>
-                   <span class="rate rate-left" v-if="item.pro_type">Sale Rate: Rs {{ item.pro_whole_sale_price_per_piece }}</span>
+                   <span class="rate rate-left" v-if="item.pro_type == '1'">Sale Rate: Rs {{ item.pro_whole_sale_price_per_piece }}</span>
                    <span class="rate rate-left" v-else>Sale Rate: Rs {{ item.pro_whole_sale_price_per_kg }}</span>
             </p>
             <p>
-                   <span class="rate rate-right" v-if="item.pro_type">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_whole_sale_price_carton }}</span>
+                   <span class="rate rate-right" v-if="item.pro_type == '1'">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_whole_sale_price_carton }}</span>
                   <span class="rate rate-right"  v-else>Bag Rate ({{ item.pro_total_weight_in_bag }}KG): Rs {{ item.pro_whole_sale_price_bag }}</span>
             </p>
           </v-expansion-panel-content>
@@ -54,11 +54,11 @@
           <v-expansion-panel-header>Purchase Price</v-expansion-panel-header>
           <v-expansion-panel-content>
               <p>
-                   <span class="rate rate-right" v-if="item.pro_type">Sale Rate : Rs {{ item.pro_purchase_price_per_piece }}</span>
+                   <span class="rate rate-right" v-if="item.pro_type == '1'">Sale Rate : Rs {{ item.pro_purchase_price_per_piece }}</span>
                    <span class="rate rate-right"  v-else>Sale Rate : Rs {{ item.pro_purchase_price_per_kg }}</span>
               </p>
               <p>
-                  <span class="rate rate-right" v-if="item.pro_type">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_purchase_price_carton }}</span>
+                  <span class="rate rate-right" v-if="item.pro_type == '1'">Carton Rate ({{ item.pro_total_piece_in_carton }}p): Rs {{ item.pro_purchase_price_carton }}</span>
                   <span class="rate rate-right"  v-else>Bag Rate ({{ item.pro_total_weight_in_bag }}KG): Rs {{ item.pro_purchase_price_bag }}</span>
               </p>
          </v-expansion-panel-content>
@@ -89,24 +89,24 @@ export default {
   name: "Home",
   mounted() { 
    
-    axios.get('http://localhost:8000/api/random-product').then((data)=>{
+    axios.get('http://RanaStore.azadtv.pk/api/random-product').then((data)=>{
       this.items=data.data;
       this.loading = false;
-         console.log(data);
+        
     }).catch(()=>console.log('Error In serve'));
     EventBus.$on('searchRefresh',(searchRefresh)=>{
         if(searchRefresh !=' ' && searchRefresh.length > 2 ){
-          axios.get('http://localhost:8000/api/search-product/'+searchRefresh).then((data)=>{
+          axios.get('http://RanaStore.azadtv.pk/api/search-product/'+searchRefresh).then((data)=>{
           this.items=data.data;
           this.loading = false;
-         console.log(data);
+        
     }).catch(()=>console.log('Error In serve'));
         }else{
 
-           axios.get('http://localhost:8000/api/random-product').then((data)=>{
+           axios.get('http://RanaStore.azadtv.pk/api/random-product').then((data)=>{
       this.items=data.data;
       this.loading = false;
-         console.log(data);
+        
     }).catch(()=>console.log('Error In serve'));
 
         }
@@ -114,10 +114,10 @@ export default {
     });
     EventBus.$on('searchTrigger',(searchQuery)=>{
       this.loading=true;
-      axios.get('http://localhost:8000/api/search-product/'+searchQuery).then((data)=>{
+      axios.get('http://RanaStore.azadtv.pk/api/search-product/'+searchQuery).then((data)=>{
       this.items=data.data;
       this.loading = false;
-         console.log(data);
+        
     }).catch(()=>console.log('Error In serve'));
     });
   },
