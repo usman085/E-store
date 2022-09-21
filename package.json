@@ -27,6 +27,6 @@
         "dotenv": "^8.2.0",
         "vue-quaggajs": "^1.0.10",
         "vue-router": "^3.1.6",
-        "vuetify": "^2.2.27"
+        "vuetify": "^2.6.10"
     }
 }
